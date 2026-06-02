@@ -114,7 +114,7 @@ defmodule Meilisearch do
     {:reply, client, client}
   end
 
-  @spec client(atom()) :: Tesla.Client.t()
+  @spec client(atom()) :: Meilisearch.Client.t()
   def client(name) do
     GenServer.call(to_name(name), :client)
   end

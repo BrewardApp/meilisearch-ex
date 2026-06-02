@@ -68,13 +68,13 @@ defmodule Meilisearch.Stats do
       }}
 
   """
-  @spec all(Tesla.Client.t(), offset: integer(), limit: integer()) ::
+  @spec all(Meilisearch.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, __MODULE__.t()}
           | {:error, Meilisearch.Client.error()}
   def all(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/stats", query: opts)
+           |> Meilisearch.Client.get("/stats", query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -101,12 +101,14 @@ defmodule Meilisearch.Stats do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) ::
+  @spec get(Meilisearch.Client.t(), String.t()) ::
           {:ok, Meilisearch.Stats.Stat.t()} | {:error, Meilisearch.Client.error()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes/:index_uid/stats", opts: [path_params: [index_uid: index_uid]])
+           |> Meilisearch.Client.get("/indexes/:index_uid/stats",
+             opts: [path_params: [index_uid: index_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.Stats.Stat.cast(data)}
     end

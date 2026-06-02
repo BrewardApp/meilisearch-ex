@@ -22,7 +22,7 @@ defmodule Meilisearch.Document do
       }]}}
 
   """
-  @spec list(Tesla.Client.t(), String.t(),
+  @spec list(Meilisearch.Client.t(), String.t(),
           offset: integer(),
           limit: integer(),
           fields: list(String.t())
@@ -32,7 +32,7 @@ defmodule Meilisearch.Document do
   def list(client, index_uid, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes/:index_uid/documents",
+           |> Meilisearch.Client.get("/indexes/:index_uid/documents",
              query: opts,
              opts: [path_params: [index_uid: index_uid]]
            )
@@ -55,11 +55,11 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t(), document_id()) ::
+  @spec get(Meilisearch.Client.t(), String.t(), document_id()) ::
           {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client, index_uid, document_id) do
     client
-    |> Tesla.get("/indexes/:index_uid/documents/:document_id",
+    |> Meilisearch.Client.get("/indexes/:index_uid/documents/:document_id",
       opts: [path_params: [index_uid: index_uid, document_id: document_id]]
     )
     |> Meilisearch.Client.handle_response()
@@ -82,7 +82,11 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec create_or_replace(Tesla.Client.t(), String.t(), list(__MODULE__.t()) | __MODULE__.t()) ::
+  @spec create_or_replace(
+          Meilisearch.Client.t(),
+          String.t(),
+          list(__MODULE__.t()) | __MODULE__.t()
+        ) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create_or_replace(client, index_uid, params) when not is_list(params),
     do: create_or_replace(client, index_uid, [params])
@@ -90,7 +94,7 @@ defmodule Meilisearch.Document do
   def create_or_replace(client, index_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/indexes/:index_uid/documents", params,
+           |> Meilisearch.Client.post("/indexes/:index_uid/documents", params,
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -115,7 +119,11 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec create_or_update(Tesla.Client.t(), String.t(), list(__MODULE__.t()) | __MODULE__.t()) ::
+  @spec create_or_update(
+          Meilisearch.Client.t(),
+          String.t(),
+          list(__MODULE__.t()) | __MODULE__.t()
+        ) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create_or_update(client, index_uid, params) when not is_list(params),
     do: create_or_update(client, index_uid, [params])
@@ -123,7 +131,7 @@ defmodule Meilisearch.Document do
   def create_or_update(client, index_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.put("/indexes/:index_uid/documents", params,
+           |> Meilisearch.Client.put("/indexes/:index_uid/documents", params,
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -148,12 +156,12 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec delete_all(Tesla.Client.t(), String.t()) ::
+  @spec delete_all(Meilisearch.Client.t(), String.t()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_all(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.delete("/indexes/:index_uid/documents",
+           |> Meilisearch.Client.delete("/indexes/:index_uid/documents",
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -178,12 +186,12 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec delete_one(Tesla.Client.t(), String.t(), document_id()) ::
+  @spec delete_one(Meilisearch.Client.t(), String.t(), document_id()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_one(client, index_uid, document_id) do
     with {:ok, data} <-
            client
-           |> Tesla.delete("/indexes/:index_uid/documents/:document_id",
+           |> Meilisearch.Client.delete("/indexes/:index_uid/documents/:document_id",
              opts: [path_params: [index_uid: index_uid, document_id: document_id]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -208,12 +216,12 @@ defmodule Meilisearch.Document do
       }}
 
   """
-  @spec delete_batch(Tesla.Client.t(), String.t(), list(document_id())) ::
+  @spec delete_batch(Meilisearch.Client.t(), String.t(), list(document_id())) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete_batch(client, index_uid, document_ids) do
     with {:ok, data} <-
            client
-           |> Tesla.post(
+           |> Meilisearch.Client.post(
              "/indexes/:index_uid/documents/delete-batch",
              document_ids,
              opts: [path_params: [index_uid: index_uid]]

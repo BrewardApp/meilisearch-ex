@@ -55,12 +55,12 @@ defmodule Meilisearch.Settings do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) ::
+  @spec get(Meilisearch.Client.t(), String.t()) ::
           {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes/:index_uid/settings",
+           |> Meilisearch.Client.get("/indexes/:index_uid/settings",
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -85,12 +85,12 @@ defmodule Meilisearch.Settings do
       }}
 
   """
-  @spec update(Tesla.Client.t(), String.t(), __MODULE__.t()) ::
+  @spec update(Meilisearch.Client.t(), String.t(), __MODULE__.t()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.patch("/indexes/:index_uid/settings", params,
+           |> Meilisearch.Client.patch("/indexes/:index_uid/settings", params,
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -115,12 +115,12 @@ defmodule Meilisearch.Settings do
       }}
 
   """
-  @spec reset(Tesla.Client.t(), String.t()) ::
+  @spec reset(Meilisearch.Client.t(), String.t()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def reset(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.delete("/indexes/:index_uid/settings",
+           |> Meilisearch.Client.delete("/indexes/:index_uid/settings",
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -144,11 +144,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["title", "overview", "genres", "release_date.year"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/displayed-attributes",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/displayed-attributes",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -171,12 +171,14 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/displayed-attributes", params,
+             |> Meilisearch.Client.put(
+               "/indexes/:index_uid/settings/displayed-attributes",
+               params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -201,12 +203,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/displayed-attributes",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/displayed-attributes",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -231,11 +233,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["title", "overview", "genres", "release_date.year"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/searchable-attributes",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/searchable-attributes",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -258,12 +260,14 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/searchable-attributes", params,
+             |> Meilisearch.Client.put(
+               "/indexes/:index_uid/settings/searchable-attributes",
+               params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -288,12 +292,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/searchable-attributes",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/searchable-attributes",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -318,11 +322,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["genres", "director", "release_date.year"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/filterable-attributes",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/filterable-attributes",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -345,12 +349,14 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/filterable-attributes", params,
+             |> Meilisearch.Client.put(
+               "/indexes/:index_uid/settings/filterable-attributes",
+               params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -375,12 +381,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/filterable-attributes",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/filterable-attributes",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -405,11 +411,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["price", "author.surname"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/sortable-attributes",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/sortable-attributes",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -432,12 +438,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/sortable-attributes", params,
+             |> Meilisearch.Client.put("/indexes/:index_uid/settings/sortable-attributes", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -462,12 +468,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/sortable-attributes",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/sortable-attributes",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -492,11 +498,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["words", "typo", "proximity", "attribute", "sort", "exactness"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/ranking-rules",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/ranking-rules",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -519,12 +525,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/ranking-rules", params,
+             |> Meilisearch.Client.put("/indexes/:index_uid/settings/ranking-rules", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -549,12 +555,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/ranking-rules",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/ranking-rules",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -579,11 +585,11 @@ defmodule Meilisearch.Settings do
         {:ok, ["of", "the", "to"]}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, list(String.t())} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/stop-words",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/stop-words",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -606,12 +612,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), list(String.t())) ::
+    @spec update(Meilisearch.Client.t(), String.t(), list(String.t())) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/stop-words", params,
+             |> Meilisearch.Client.put("/indexes/:index_uid/settings/stop-words", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -636,12 +642,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/stop-words",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/stop-words",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -670,11 +676,11 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, %{String.t() => list(String.t())}} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/synonyms",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/synonyms",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -701,12 +707,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), %{String.t() => list(String.t())}) ::
+    @spec update(Meilisearch.Client.t(), String.t(), %{String.t() => list(String.t())}) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.put("/indexes/:index_uid/settings/synonyms", params,
+             |> Meilisearch.Client.put("/indexes/:index_uid/settings/synonyms", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -731,12 +737,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/synonyms",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/synonyms",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -761,11 +767,11 @@ defmodule Meilisearch.Settings do
         {:ok, "skuid"}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, String.t()} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       client
-      |> Tesla.get("/indexes/:index_uid/settings/distinct-attribute",
+      |> Meilisearch.Client.get("/indexes/:index_uid/settings/distinct-attribute",
         opts: [path_params: [index_uid: index_uid]]
       )
       |> Meilisearch.Client.handle_response()
@@ -788,13 +794,13 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), String.t()) ::
+    @spec update(Meilisearch.Client.t(), String.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             # Tesla encodes "uuid" to uuid instead of "\"uuid\""
-             |> Tesla.put(
+             # Send this as a raw JSON string instead of a JSON object.
+             |> Meilisearch.Client.put(
                "/indexes/:index_uid/settings/distinct-attribute",
                params |> Jason.encode!(),
                opts: [path_params: [index_uid: index_uid]]
@@ -821,12 +827,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/distinct-attribute",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/distinct-attribute",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -867,12 +873,12 @@ defmodule Meilisearch.Settings do
         {:ok, %Meilisearch.Settings.Faceting{maxValuesPerFacet: 100}}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.get("/indexes/:index_uid/settings/faceting",
+             |> Meilisearch.Client.get("/indexes/:index_uid/settings/faceting",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -897,12 +903,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), %{maxValuesPerFacet: integer()}) ::
+    @spec update(Meilisearch.Client.t(), String.t(), %{maxValuesPerFacet: integer()}) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.patch("/indexes/:index_uid/settings/faceting", params,
+             |> Meilisearch.Client.patch("/indexes/:index_uid/settings/faceting", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -927,12 +933,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/faceting",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/faceting",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -973,12 +979,12 @@ defmodule Meilisearch.Settings do
         {:ok, %Meilisearch.Settings.Pagination{maxTotalHits: 1000}}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.get("/indexes/:index_uid/settings/pagination",
+             |> Meilisearch.Client.get("/indexes/:index_uid/settings/pagination",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1003,12 +1009,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), %{maxTotalHits: integer()}) ::
+    @spec update(Meilisearch.Client.t(), String.t(), %{maxTotalHits: integer()}) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.patch("/indexes/:index_uid/settings/pagination", params,
+             |> Meilisearch.Client.patch("/indexes/:index_uid/settings/pagination", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1033,12 +1039,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/pagination",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/pagination",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1093,12 +1099,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec get(Tesla.Client.t(), String.t()) ::
+    @spec get(Meilisearch.Client.t(), String.t()) ::
             {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
     def get(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.get("/indexes/:index_uid/settings/typo-tolerance",
+             |> Meilisearch.Client.get("/indexes/:index_uid/settings/typo-tolerance",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1123,7 +1129,7 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec update(Tesla.Client.t(), String.t(), %{
+    @spec update(Meilisearch.Client.t(), String.t(), %{
             enabled: boolean(),
             disableOnWords: list(String.t()),
             disableOnAttributes: list(String.t()),
@@ -1136,7 +1142,7 @@ defmodule Meilisearch.Settings do
     def update(client, index_uid, params) do
       with {:ok, data} <-
              client
-             |> Tesla.patch("/indexes/:index_uid/settings/typo-tolerance", params,
+             |> Meilisearch.Client.patch("/indexes/:index_uid/settings/typo-tolerance", params,
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do
@@ -1161,12 +1167,12 @@ defmodule Meilisearch.Settings do
         }}
 
     """
-    @spec reset(Tesla.Client.t(), String.t()) ::
+    @spec reset(Meilisearch.Client.t(), String.t()) ::
             {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
     def reset(client, index_uid) do
       with {:ok, data} <-
              client
-             |> Tesla.delete("/indexes/:index_uid/settings/typo-tolerance",
+             |> Meilisearch.Client.delete("/indexes/:index_uid/settings/typo-tolerance",
                opts: [path_params: [index_uid: index_uid]]
              )
              |> Meilisearch.Client.handle_response() do

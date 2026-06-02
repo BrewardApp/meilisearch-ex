@@ -58,13 +58,13 @@ defmodule Meilisearch.Key do
       }]}}
 
   """
-  @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
+  @spec list(Meilisearch.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, Meilisearch.Pagination.t(__MODULE__.t())}
           | {:error, Meilisearch.Client.error()}
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/keys", query: opts)
+           |> Meilisearch.Client.get("/keys", query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.Pagination.cast(data, &__MODULE__.cast/1)}
     end
@@ -91,12 +91,12 @@ defmodule Meilisearch.Key do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) ::
+  @spec get(Meilisearch.Client.t(), String.t()) ::
           {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client, key_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/keys/:key_uid", opts: [path_params: [key_uid: key_uid]])
+           |> Meilisearch.Client.get("/keys/:key_uid", opts: [path_params: [key_uid: key_uid]])
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -123,7 +123,7 @@ defmodule Meilisearch.Key do
       }}
 
   """
-  @spec create(Tesla.Client.t(), %{
+  @spec create(Meilisearch.Client.t(), %{
           uid: String.t() | nil,
           name: String.t() | nil,
           description: String.t() | nil,
@@ -135,7 +135,7 @@ defmodule Meilisearch.Key do
   def create(client, params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/keys", params)
+           |> Meilisearch.Client.post("/keys", params)
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -162,7 +162,7 @@ defmodule Meilisearch.Key do
       }}
 
   """
-  @spec update(Tesla.Client.t(), String.t(), %{
+  @spec update(Meilisearch.Client.t(), String.t(), %{
           name: String.t() | nil,
           description: String.t() | nil
         }) ::
@@ -170,7 +170,9 @@ defmodule Meilisearch.Key do
   def update(client, key_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.patch("/keys/:key_uid", params, opts: [path_params: [key_uid: key_uid]])
+           |> Meilisearch.Client.patch("/keys/:key_uid", params,
+             opts: [path_params: [key_uid: key_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -187,12 +189,12 @@ defmodule Meilisearch.Key do
       {:ok, nil}
 
   """
-  @spec delete(Tesla.Client.t(), String.t()) ::
+  @spec delete(Meilisearch.Client.t(), String.t()) ::
           {:ok, nil} | {:error, Meilisearch.Client.error()}
   def delete(client, key_uid) do
     with {:ok, _} <-
            client
-           |> Tesla.delete("/keys/:key_uid", opts: [path_params: [key_uid: key_uid]])
+           |> Meilisearch.Client.delete("/keys/:key_uid", opts: [path_params: [key_uid: key_uid]])
            |> Meilisearch.Client.handle_response() do
       {:ok, nil}
     end

@@ -21,12 +21,12 @@ defmodule Meilisearch.Dump do
       }}
 
   """
-  @spec create(Tesla.Client.t()) ::
+  @spec create(Meilisearch.Client.t()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create(client) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/dumps", %{})
+           |> Meilisearch.Client.post("/dumps", %{})
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end

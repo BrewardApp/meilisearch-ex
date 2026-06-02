@@ -24,7 +24,7 @@
 
 <p align="center">🧪 The Meilisearch API client written for Elixir</p>
 
-**Meilisearch Ex** is a **unofficial** the Meilisearch API client based on [Finch](https://github.com/sneako/finch) HTTP client wrapped by [Tesla](https://github.com/elixir-tesla/tesla) for Elixir developers.
+**Meilisearch Ex** is an unofficial Meilisearch API client based on [Req](https://github.com/wojtekmach/req) for Elixir developers.
 
 **Meilisearch** is an open-source search engine. [Learn more about Meilisearch.](https://github.com/meilisearch/meilisearch)
 
@@ -51,13 +51,18 @@ The package can be installed by adding `meilisearch_ex` to your list of dependen
 ```elixir
 def deps do
   [
-    {:finch, "~> 0.14.0"},
     {:meilisearch_ex, "~> 1.2.1"}
   ]
 end
 ```
 
-`meilisearch-ex` officially supports `elixir` versions >= 1.14
+If you want to pass a named Finch pool to the client, add Finch explicitly to your application dependencies:
+
+```elixir
+{:finch, "~> 0.22"}
+```
+
+`meilisearch-ex` officially supports `elixir` versions >= 1.15
 
 ### Run Meilisearch <!-- omit in toc -->
 
@@ -68,7 +73,7 @@ To use one of our SDKs, you must first have a running Meilisearch instance. Cons
 There is multiple ways to define and start the Meilisearch client:
 
 ```elixir
-# Start finch with your app
+# Start Finch with your app when you want to provide your own pool.
 Finch.start_link(name: :search_finch)
 
 # Create a Meilisearch client whenever and wherever you need it.
@@ -138,30 +143,6 @@ defmodule MyApp.MyContext do
   end
 end
 ```
-
-### Using another HTTP adapter
-
-Given that the HTTP client is backed by Tesla behind the scene, you can freely use another adapter if it is more suitable for you.
-
-```elixir
-def deps do
-  [
-    {:hackney, "~> 1.18"},
-    {:meilisearch_ex, "~> 1.2.1"}
-  ]
-end
-```
-```elixir
-
-# Create a Meilisearch client whenever and wherever you need it.
-[endpoint: "http://127.0.0.1:7700", key: "masterKey", adapter: Tesla.Adapter.Hackney]
-|> Meilisearch.Client.new()
-|> Meilisearch.Health.get()
-
-# %Meilisearch.Health{status: "available"}
-```
-
-
 
 ## 🎬 Getting started
 

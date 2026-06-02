@@ -38,13 +38,13 @@ defmodule Meilisearch.Index do
       }]}}
 
   """
-  @spec list(Tesla.Client.t(), offset: integer(), limit: integer()) ::
+  @spec list(Meilisearch.Client.t(), offset: integer(), limit: integer()) ::
           {:ok, Meilisearch.Pagination.t(__MODULE__.t())}
           | {:error, Meilisearch.Client.error()}
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes", query: opts)
+           |> Meilisearch.Client.get("/indexes", query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.Pagination.cast(data, &__MODULE__.cast/1)}
     end
@@ -66,12 +66,16 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec get(Tesla.Client.t(), String.t()) ::
-          {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error(), integer()} | {:error, term()}
+  @spec get(Meilisearch.Client.t(), String.t()) ::
+          {:ok, __MODULE__.t()}
+          | {:error, Meilisearch.Client.error(), integer()}
+          | {:error, term()}
   def get(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/indexes/:index_uid", opts: [path_params: [index_uid: index_uid]])
+           |> Meilisearch.Client.get("/indexes/:index_uid",
+             opts: [path_params: [index_uid: index_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -94,12 +98,12 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec create(Tesla.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
+  @spec create(Meilisearch.Client.t(), %{uid: String.t(), primaryKey: String.t() | nil}) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def create(client, params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/indexes", params)
+           |> Meilisearch.Client.post("/indexes", params)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
@@ -122,12 +126,12 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec update(Tesla.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
+  @spec update(Meilisearch.Client.t(), String.t(), %{primaryKey: String.t() | nil}) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def update(client, index_uid, params) do
     with {:ok, data} <-
            client
-           |> Tesla.patch("/indexes/:index_uid", params,
+           |> Meilisearch.Client.patch("/indexes/:index_uid", params,
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
@@ -152,12 +156,14 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec delete(Tesla.Client.t(), String.t()) ::
+  @spec delete(Meilisearch.Client.t(), String.t()) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def delete(client, index_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.delete("/indexes/:index_uid", opts: [path_params: [index_uid: index_uid]])
+           |> Meilisearch.Client.delete("/indexes/:index_uid",
+             opts: [path_params: [index_uid: index_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
@@ -180,12 +186,12 @@ defmodule Meilisearch.Index do
       }}
 
   """
-  @spec swap(Tesla.Client.t(), list(%{indexes: list(String.t())})) ::
+  @spec swap(Meilisearch.Client.t(), list(%{indexes: list(String.t())})) ::
           {:ok, Meilisearch.SummarizedTask.t()} | {:error, Meilisearch.Client.error()}
   def swap(client, params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/swap-indexes", params)
+           |> Meilisearch.Client.post("/swap-indexes", params)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end

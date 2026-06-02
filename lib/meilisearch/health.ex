@@ -28,11 +28,12 @@ defmodule Meilisearch.Health do
       {:ok, %{status: "available"}}
 
   """
-  @spec get(Tesla.Client.t()) :: {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
+  @spec get(Meilisearch.Client.t()) ::
+          {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/health")
+           |> Meilisearch.Client.get("/health")
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -49,7 +50,7 @@ defmodule Meilisearch.Health do
       true
 
   """
-  @spec healthy?(Tesla.Client.t()) :: boolean()
+  @spec healthy?(Meilisearch.Client.t()) :: boolean()
   def healthy?(client) do
     case get(client) do
       {:ok, %{status: "available"}} -> true

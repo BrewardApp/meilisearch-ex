@@ -85,7 +85,7 @@ defmodule Meilisearch.Task do
 
   """
   @spec list(
-          Tesla.Client.t(),
+          Meilisearch.Client.t(),
           limit: integer(),
           from: integer(),
           uids: String.t(),
@@ -105,7 +105,7 @@ defmodule Meilisearch.Task do
   def list(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/tasks", query: opts)
+           |> Meilisearch.Client.get("/tasks", query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.PaginatedTasks.cast(data)}
     end
@@ -143,12 +143,14 @@ defmodule Meilisearch.Task do
       }}
 
   """
-  @spec get(Tesla.Client.t(), integer()) ::
+  @spec get(Meilisearch.Client.t(), integer()) ::
           {:ok, __MODULE__.t()} | {:error, Meilisearch.Client.error()}
   def get(client, task_uid) do
     with {:ok, data} <-
            client
-           |> Tesla.get("/tasks/:task_uid", opts: [path_params: [task_uid: task_uid]])
+           |> Meilisearch.Client.get("/tasks/:task_uid",
+             opts: [path_params: [task_uid: task_uid]]
+           )
            |> Meilisearch.Client.handle_response() do
       {:ok, cast(data)}
     end
@@ -171,7 +173,7 @@ defmodule Meilisearch.Task do
       }}
 
   """
-  @spec cancel(Tesla.Client.t(),
+  @spec cancel(Meilisearch.Client.t(),
           uids: String.t(),
           statuses: String.t(),
           types: String.t(),
@@ -188,7 +190,7 @@ defmodule Meilisearch.Task do
   def cancel(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/tasks/cancel", nil, query: opts)
+           |> Meilisearch.Client.post("/tasks/cancel", nil, query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end
@@ -211,7 +213,7 @@ defmodule Meilisearch.Task do
       }}
 
   """
-  @spec delete(Tesla.Client.t(),
+  @spec delete(Meilisearch.Client.t(),
           uids: String.t(),
           statuses: String.t(),
           types: String.t(),
@@ -229,7 +231,7 @@ defmodule Meilisearch.Task do
   def delete(client, opts \\ []) do
     with {:ok, data} <-
            client
-           |> Tesla.delete("/tasks", query: opts)
+           |> Meilisearch.Client.delete("/tasks", query: opts)
            |> Meilisearch.Client.handle_response() do
       {:ok, Meilisearch.SummarizedTask.cast(data)}
     end

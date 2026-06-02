@@ -1,14 +1,14 @@
 defmodule Meilisearch.MixProject do
   use Mix.Project
 
-  @version "1.2.2"
+  @version "1.3.0"
   @github_url "https://github.com/nutshell-lab/meilisearch-ex"
 
   def project do
     [
       app: :meilisearch_ex,
       version: @version,
-      elixir: "~> 1.14",
+      elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -33,7 +33,7 @@ defmodule Meilisearch.MixProject do
   end
 
   defp description do
-    "An unofficial Meilisearch client based on Tesla HTTP client."
+    "An unofficial Meilisearch client based on Req HTTP client."
   end
 
   defp package do
@@ -57,12 +57,11 @@ defmodule Meilisearch.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.4"},
+      {:req, "~> 0.5"},
       {:jason, ">= 1.0.0"},
       {:ecto, ">= 3.7.0 and < 4.0.0"},
-      {:finch, "~> 0.14.0", only: [:dev, :test]},
+      {:finch, "~> 0.22"},
       {:typed_ecto_schema, "~> 0.4.1", runtime: false},
-      {:excontainers, "~> 0.3.0", only: [:dev, :test]},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:excoveralls, "~> 0.10", only: :test},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false}

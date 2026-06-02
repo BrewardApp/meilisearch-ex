@@ -122,7 +122,7 @@ defmodule Meilisearch.MultiSearch do
 
   """
   @spec multi_search(
-          Tesla.Client.t(),
+          Meilisearch.Client.t(),
           search_params()
         ) ::
           {:ok, __MODULE__.t(Meilisearch.Document.t())}
@@ -145,7 +145,7 @@ defmodule Meilisearch.MultiSearch do
 
     with {:ok, %{"results" => data}} <-
            client
-           |> Tesla.post("/multi-search", %{queries: params})
+           |> Meilisearch.Client.post("/multi-search", %{queries: params})
            |> Meilisearch.Client.handle_response() do
       {:ok, __MODULE__.cast(data)}
     end

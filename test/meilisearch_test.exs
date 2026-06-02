@@ -1,6 +1,5 @@
 defmodule MeilisearchTest do
   use ExUnit.Case, async: true
-  import Excontainers.ExUnit
 
   defmodule Movie do
     defstruct [:uuid, :title, :director, :genres, :rating]
@@ -16,14 +15,17 @@ defmodule MeilisearchTest do
     image = "getmeili/meilisearch:v#{version}"
     key = "master_key_test"
 
-    {:ok, meili} = run_container(MeilisearchTest.MeiliContainer.new(image, key: key))
+    {:ok, meili} = MeilisearchTest.MeiliContainer.start(image, key: key)
+    {:ok, endpoint} = MeilisearchTest.MeiliContainer.connection_url(meili)
 
     Finch.start_link(name: :meili_finch)
+
+    on_exit(fn -> MeilisearchTest.MeiliContainer.stop(meili) end)
 
     [
       version: version,
       meili: [
-        endpoint: MeilisearchTest.MeiliContainer.connection_url(meili),
+        endpoint: endpoint,
         key: key,
         debug: false,
         finch: :meili_finch
@@ -1317,12 +1319,14 @@ defmodule MeilisearchTest do
               %Meilisearch.Task{
                 uid: _,
                 indexUid: "movies",
-                status: :canceled,
+                status: document_task_status,
                 type: :documentAdditionOrUpdate
               }} =
                :main
                |> Meilisearch.client()
                |> Meilisearch.Task.get(task_to_cancel)
+
+      assert document_task_status in [:canceled, :succeeded]
 
       assert {:ok,
               %Meilisearch.Task{

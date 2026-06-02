@@ -112,7 +112,7 @@ defmodule Meilisearch.Search do
 
   """
   @spec search(
-          Tesla.Client.t(),
+          Meilisearch.Client.t(),
           String.t(),
           q: String.t(),
           offset: integer(),
@@ -142,7 +142,7 @@ defmodule Meilisearch.Search do
   def search(client, index_uid, params) when is_map(params) do
     with {:ok, data} <-
            client
-           |> Tesla.post("/indexes/:index_uid/search", params,
+           |> Meilisearch.Client.post("/indexes/:index_uid/search", params,
              opts: [path_params: [index_uid: index_uid]]
            )
            |> Meilisearch.Client.handle_response() do
